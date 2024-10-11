@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Titulo"
+        android:inputType="text"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/editTextContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:gravity="top"
+        android:hint="Escribe aquí la primera huevada que se te venga a la cabeza"
+        android:inputType="textMultiLine"
+        android:lines="5" />
+
+    <Button
+        android:id="@+id/buttonCreatePost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Crear Post" />
+
+</LinearLayout>
