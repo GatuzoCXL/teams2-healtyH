@@ -11,6 +11,8 @@ import com.example.teams.databinding.FragmentCreatePostBinding
 import com.example.teams.model.Post
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import java.util.Date
+import com.google.firebase.Timestamp
 
 class CreatePostFragment : Fragment() {
 
@@ -35,26 +37,54 @@ class CreatePostFragment : Fragment() {
         val content = binding.editTextContent.text.toString().trim()
         val currentUser = FirebaseAuth.getInstance().currentUser
 
-        if (title.isNotEmpty() && content.isNotEmpty() && currentUser != null) {
-            val post = Post(
-                title = title,
-                content = content,
-                authorId = currentUser.uid,
-                communityId = "" //nota de implementar una forma de seleccionar una comunidad.
-            )
-
-            FirebaseFirestore.getInstance().collection("posts")
-                .add(post)
-                .addOnSuccessListener {
-                    Toast.makeText(context, "Post creado correctamente", Toast.LENGTH_SHORT).show()
-                    findNavController().navigateUp()
-                }
-                .addOnFailureListener {
-                    Toast.makeText(context, "Error al crear tu huevada", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(context, "Por favor complete todos los campos", Toast.LENGTH_SHORT).show()
+        if (title.isEmpty()) {
+            binding.editTextTitle.error = "El título es obligatorio"
+            return
         }
+
+        if (content.isEmpty()) {
+            binding.editTextContent.error = "Escribe algo ps sanas@"
+            return
+        }
+
+        val authorId = currentUser?.uid ?: "anonymous_user"
+
+        //por ahora se usará una ID de comunidad
+        val defaultCommunityId = "default_community_id"
+
+        val post = Post(
+            title = title,
+            content = content,
+            authorId = authorId,
+            communityId = defaultCommunityId,
+            createdAt = Timestamp.now(),
+            upvotes = 0,
+            downvotes = 0,
+            commentCount = 0,
+            id = "",
+        )
+
+        //codigo de emergencia
+        FirebaseFirestore.getInstance().collection("posts")
+            .add(post)
+            .addOnSuccessListener { documentReference ->
+                // Asignar el ID generado al objeto post
+                val updatedPost = post.copy(id = documentReference.id)
+        //cod"""
+
+                FirebaseFirestore.getInstance().collection("posts").document(updatedPost.id)
+                    .set(updatedPost)
+                    .addOnSuccessListener {
+                        Toast.makeText(context, "Post creado correctamente", Toast.LENGTH_SHORT).show()
+                        findNavController().navigateUp()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(context, "Error al actualizar el post con ID: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(context, "Error al crear el post: ${e.localizedMessage}", Toast.LENGTH_LONG).show()
+            }
     }
 
     override fun onDestroyView() {

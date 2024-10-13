@@ -4,3 +4,10 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android) apply false
     id("com.google.gms.google-services") version "4.4.2" apply false
 }
+
+//algo que puede on o servir
+buildscript {
+    dependencies {
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.7.6")
+    }
+}

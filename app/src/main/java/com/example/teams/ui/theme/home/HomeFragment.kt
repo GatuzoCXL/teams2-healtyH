@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.teams.databinding.FragmentHomeBinding
 import com.example.teams.model.Post
 import com.google.firebase.firestore.FirebaseFirestore
+import androidx.navigation.fragment.findNavController
 
 class HomeFragment : Fragment() {
 
@@ -24,7 +25,11 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        postAdapter = PostAdapter()
+        postAdapter = PostAdapter { post ->
+            val action = HomeFragmentDirections.actionHomeFragmentToPostDetailFragment(post.id)
+            findNavController().navigate(action)
+        }
+
         binding.recyclerViewPosts.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = postAdapter
@@ -39,7 +44,7 @@ class HomeFragment : Fragment() {
             .limit(20)
             .addSnapshotListener { snapshot, e ->
                 if (e != null) {
-                    //Manejar el error
+                    //manejo de errorese
                     return@addSnapshotListener
                 }
 

@@ -4,6 +4,8 @@ plugins {
     // guatafac id("com.android.application")
     id("com.google.gms.google-services")
     kotlin("kapt")
+    //los argsss
+    id("androidx.navigation.safeargs.kotlin")
 }
 
 android {
