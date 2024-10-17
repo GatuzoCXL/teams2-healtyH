@@ -44,7 +44,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Actualizar Post" />
+            android:text="Actualizar Post"
+            android:backgroundTint="#0E4992"/>
 
     </LinearLayout>
 </ScrollView>
